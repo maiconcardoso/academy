@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Anime {
 
+    private Integer id;
     private String name;
 }

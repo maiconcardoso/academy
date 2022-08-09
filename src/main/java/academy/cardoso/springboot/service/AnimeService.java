@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import academy.cardoso.springboot.domain.Anime;
+import academy.cardoso.springboot.mappers.AnimeMapper;
 import academy.cardoso.springboot.repository.AnimeRepository;
 import academy.cardoso.springboot.request.AnimePostRequestBody;
 import academy.cardoso.springboot.request.AnimePutRequestBody;
@@ -27,8 +28,12 @@ public class AnimeService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime id not Found"));
     }
 
+    public List<Anime> AnimeByName(String name) {
+        return animeRepository.findByName(name);
+    }
+
     public Anime save(AnimePostRequestBody animePostRequestBody) {
-        Anime animeSaved = Anime.builder().name(animePostRequestBody.getName()).build();
+        Anime animeSaved = AnimeMapper.INSTANCE.toAnime(animePostRequestBody);
         return animeRepository.save(animeSaved);
     }
 
@@ -38,11 +43,9 @@ public class AnimeService {
     }
 
     public void replace(AnimePutRequestBody animePutRequestBody) {
-        findByIdOrElseThrowException(animePutRequestBody.getId());
-        Anime animeReplace = Anime.builder()
-            .id(animePutRequestBody.getId())
-            .name(animePutRequestBody.getName())
-            .build();
+        Anime animeById = findByIdOrElseThrowException(animePutRequestBody.getId());
+        Anime animeReplace = AnimeMapper.INSTANCE.toAnime(animePutRequestBody);
+        animeReplace.setId(animeById.getId());
         animeRepository.save(animeReplace);
     }
 

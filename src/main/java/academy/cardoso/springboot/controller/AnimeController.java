@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import academy.cardoso.springboot.domain.Anime;
@@ -42,6 +43,11 @@ public class AnimeController {
     @GetMapping("/{id}")
     public ResponseEntity<Anime> findById(@PathVariable Long id) {
         return new ResponseEntity<Anime>(service.findByIdOrElseThrowException(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<List<Anime>> findByName(@RequestParam(name = "name") String anime) {
+        return ResponseEntity.ok(service.AnimeByName(anime));
     }
 
     @PostMapping

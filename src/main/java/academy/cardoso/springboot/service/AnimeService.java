@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import academy.cardoso.springboot.domain.Anime;
+import academy.cardoso.springboot.exceptions.BadRequestException;
 import academy.cardoso.springboot.mappers.AnimeMapper;
 import academy.cardoso.springboot.repository.AnimeRepository;
 import academy.cardoso.springboot.request.AnimePostRequestBody;
@@ -25,7 +26,7 @@ public class AnimeService {
 
     public Anime findByIdOrElseThrowException(Long id) {
         return animeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime id not Found"));
+                .orElseThrow(() -> new BadRequestException(BadRequestException.MESSAGE));
     }
 
     public List<Anime> AnimeByName(String name) {

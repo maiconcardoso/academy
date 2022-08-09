@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import academy.cardoso.springboot.domain.Anime;
+import academy.cardoso.springboot.request.AnimePostRequestBody;
+import academy.cardoso.springboot.request.AnimePutRequestBody;
 import academy.cardoso.springboot.service.AnimeService;
 import academy.cardoso.springboot.util.DateUtil;
 import lombok.extern.log4j.Log4j2;
@@ -31,25 +33,20 @@ public class AnimeController {
     @Autowired
     private AnimeService service;
 
-    // public AnimeController(DateUtil dateUtil, AnimeService service) {
-    //     this.dateUtil = dateUtil;
-    //     this.service = service;
-    // }
-
     @GetMapping
     public ResponseEntity<List<Anime>> list() {
         log.info(dateUtil.formatLocalDateTimeToDataBaseStyle(LocalDateTime.now()));
-        return new ResponseEntity<>(service.listAll(), HttpStatus.OK);
+        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Anime> findById(@PathVariable Long id) {
-        return new ResponseEntity<Anime>(service.findById(id), HttpStatus.OK);
+        return new ResponseEntity<Anime>(service.findByIdOrElseThrowException(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Anime> save(@RequestBody Anime anime) {
-        return new ResponseEntity<Anime>(service.save(anime), HttpStatus.CREATED);
+    public ResponseEntity<Anime> save(@RequestBody AnimePostRequestBody animePostRequestBody) {
+        return new ResponseEntity<Anime>(service.save(animePostRequestBody), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
@@ -59,8 +56,8 @@ public class AnimeController {
     }
 
     @PutMapping
-    public ResponseEntity<Anime> replace(@RequestBody Anime anime) {
-        service.replace(anime);
+    public ResponseEntity<Anime> replace(@RequestBody AnimePutRequestBody animePutRequestBody) {
+        service.replace(animePutRequestBody);
         return new ResponseEntity<Anime>(HttpStatus.OK);
     }
 

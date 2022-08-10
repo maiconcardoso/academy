@@ -3,9 +3,8 @@ package academy.cardoso.springboot.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 import academy.cardoso.springboot.domain.Anime;
 import academy.cardoso.springboot.exceptions.BadRequestException;
@@ -33,6 +32,7 @@ public class AnimeService {
         return animeRepository.findByName(name);
     }
 
+    @Transactional // Em caso de exceções do tipo unchecked o transactional impedirá a finalização do método.
     public Anime save(AnimePostRequestBody animePostRequestBody) {
         Anime animeSaved = AnimeMapper.INSTANCE.toAnime(animePostRequestBody);
         return animeRepository.save(animeSaved);

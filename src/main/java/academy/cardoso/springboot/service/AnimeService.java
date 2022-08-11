@@ -3,6 +3,8 @@ package academy.cardoso.springboot.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +21,13 @@ public class AnimeService {
     @Autowired
     private AnimeRepository animeRepository;
 
-    public List<Anime> findAll() {
-        return animeRepository.findAll();
+    // public List<Anime> findAll() {
+    //     return animeRepository.findAll();
+    // }
+
+    public Page<Anime> findAll(Pageable pageable) {
+        return animeRepository.findAll(pageable);
+
     }
 
     public Anime findByIdOrElseThrowException(Long id) {

@@ -27,7 +27,10 @@ public class AnimeService {
 
     public Page<Anime> findAll(Pageable pageable) {
         return animeRepository.findAll(pageable);
-
+        
+    }
+    public List<Anime> findAllNoPageable() {
+        return animeRepository.findAll();
     }
 
     public Anime findByIdOrElseThrowException(Long id) {
@@ -56,5 +59,6 @@ public class AnimeService {
         animeReplace.setId(animeById.getId());
         animeRepository.save(animeReplace);
     }
+
 
 }

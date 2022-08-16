@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import academy.cardoso.springboot.domain.Anime;
+import academy.cardoso.springboot.util.AnimeCreator;
 
 @DataJpaTest
 @DisplayName("Tests for anime repository")
@@ -23,7 +24,7 @@ public class AnimeRepositoryTest {
     @Test
     @DisplayName("Save creates anime when succesful")
     public void save_PersistAnime_WhenSuccessful() {
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         Anime animeSaved = animeRepository.save(animeToBeSaved);
         Assertions.assertThat(animeSaved).isNotNull();
         Assertions.assertThat(animeSaved.getId()).isNotNull();
@@ -33,7 +34,7 @@ public class AnimeRepositoryTest {
     @Test
     @DisplayName("Save updated anime when succesful")
     public void update_PersistAnime_WhenSuccesful() {
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         Anime animeSaved = animeRepository.save(animeToBeSaved);
         animeSaved.setName("Akira");
         Anime animeUpdated = this.animeRepository.save(animeSaved);
@@ -46,7 +47,7 @@ public class AnimeRepositoryTest {
     @Test
     @DisplayName("Delete removes anime when succesful")
     public void delete_RemovesAnime_WhenSuccesful() {
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         Anime animeSaved = animeRepository.save(animeToBeSaved);
         animeRepository.delete(animeSaved);
         Optional<Anime> animeOptional = animeRepository.findById(animeSaved.getId());
@@ -56,7 +57,7 @@ public class AnimeRepositoryTest {
     @Test
     @DisplayName("Find By Name returns list of animes when successful")
     public void findByName_ReturnsListOfAnime_WhenSuccessful() {
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         Anime animeSaved = animeRepository.save(animeToBeSaved);
         String name = animeSaved.getName();
         List<Anime> animes = animeRepository.findByName(name);
@@ -84,10 +85,6 @@ public class AnimeRepositoryTest {
     }
 
 
-    private Anime createAnime() {
-        return Anime.builder()
-                .name("Psyco pass")
-                .build();
-    }
+    
 
 }

@@ -1,13 +1,12 @@
 package academy.cardoso.springboot.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +23,6 @@ import academy.cardoso.springboot.domain.Anime;
 import academy.cardoso.springboot.request.AnimePostRequestBody;
 import academy.cardoso.springboot.request.AnimePutRequestBody;
 import academy.cardoso.springboot.service.AnimeService;
-import academy.cardoso.springboot.util.DateUtil;
 import lombok.extern.log4j.Log4j2;
 
 @RestController
@@ -33,17 +31,12 @@ import lombok.extern.log4j.Log4j2;
 public class AnimeController {
 
     @Autowired
-    private DateUtil dateUtil;
-
-    @Autowired
     private AnimeService service;
 
     @GetMapping
     public ResponseEntity<Page<Anime>> list(Pageable pageable) {
-        log.info(dateUtil.formatLocalDateTimeToDataBaseStyle(LocalDateTime.now()));
         return new ResponseEntity<>(service.findAll(pageable), HttpStatus.OK);
     }
-
 
     @GetMapping("/all")
     public ResponseEntity<List<Anime>> listAll() {

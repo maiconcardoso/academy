@@ -50,7 +50,7 @@ public class AnimeController {
 
     @GetMapping("/find")
     public ResponseEntity<List<Anime>> findByName(@RequestParam(name = "name") String name) {
-        return ResponseEntity.ok(service.AnimeByName(name));
+        return ResponseEntity.ok(service.findByName(name));
     }
 
     @PostMapping

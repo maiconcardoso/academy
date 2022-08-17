@@ -38,7 +38,7 @@ public class AnimeService {
                 .orElseThrow(() -> new BadRequestException(BadRequestException.MESSAGE));
     }
 
-    public List<Anime> AnimeByName(String name) {
+    public List<Anime> findByName(String name) {
         return animeRepository.findByName(name);
     }
 

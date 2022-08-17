@@ -39,7 +39,7 @@ public class AnimeController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Anime>> listAll() {
+    public ResponseEntity<List<Anime>> listAllNoPageable() {
         return new ResponseEntity<>(service.findAllNoPageable(), HttpStatus.OK);
     }
 

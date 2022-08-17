@@ -31,8 +31,12 @@ public class AnimeControllerTest {
     @BeforeEach
     void setUp() {
         PageImpl<Anime> animePage = new PageImpl<>(List.of(AnimeCreator.createValidAnime()));
+
         BDDMockito.when(this.animeServiceMock.findAll(ArgumentMatchers.any()))
             .thenReturn(animePage); 
+
+        BDDMockito.when(this.animeServiceMock.findAllNoPageable())
+            .thenReturn(List.of(AnimeCreator.createValidAnime()));
     }
 
     @Test
@@ -46,6 +50,22 @@ public class AnimeControllerTest {
             .isNotEmpty()
             .hasSize(1);
         Assertions.assertThat(animePage.toList().get(0).getName()).isEqualTo(expectedName);
+
+    }
+
+    @Test
+    @DisplayName("ListAll returns of animes when successful")
+    public void listAll_returnsOfAnimes_WhenSuccessful() {
+        String expectedName = AnimeCreator.createValidAnime().getName();
+
+        List<Anime> animes = animeController.listAllNoPageable().getBody();
+
+        Assertions.assertThat(animes)
+            .isNotNull()
+            .isNotEmpty()
+            .hasSize(1);
+
+        Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
 
     }
     

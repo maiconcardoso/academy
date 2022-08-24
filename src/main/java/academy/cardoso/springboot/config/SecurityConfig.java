@@ -7,13 +7,15 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import lombok.extern.log4j.Log4j2;
-
 
 @EnableWebSecurity
 @Configuration
@@ -25,25 +27,38 @@ public class SecurityConfig{
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-        .anyRequest()
-        .authenticated()
-        .and()
-        .httpBasic();
-        
+                .anyRequest()
+                .authenticated()
+                .and()
+                .httpBasic();
+
         return http.build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        log.info("Password Encoder {} ", passwordEncoder.encode("test"));
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration
+            ) throws Exception {
+        log.info("Password Encoder {} ", passwordEncoder().encode("test"));
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails user = User.builder()
+            .username("maicon")
+            .password(passwordEncoder().encode("test"))
+            .roles("USER")
+            .build();
+        UserDetails admin = User.builder()
+            .username("admin")
+            .password(passwordEncoder().encode("test"))
+            .roles("USER", "ADMIN")
+            .build();
+        return new InMemoryUserDetailsManager(user, admin);
+    }
 
-    
 }
